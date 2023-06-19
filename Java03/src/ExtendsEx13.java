@@ -13,7 +13,6 @@ class Parent13{
 
 class Child13 extends Parent13{
 	protected int z;
-	
 	public Child13() {
 		super();//생략가능
 		System.out.println("Child13 기본생성자");
@@ -28,5 +27,7 @@ public class ExtendsEx13 {
 	public static void main(String[] args) {
 		Child13 ch13 = new Child13(1,2,3);
 		Child13 ch13_1 = new Child13();
+		
+		
 	}
 }
