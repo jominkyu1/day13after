@@ -1,27 +1,40 @@
+
 import java.util.function.DoubleBinaryOperator;
 
-enum Oper02{
-	PLUS("+", (x, y) -> x+y),
-	MINUS("-", (x, y) -> x-y),
-	TIMES("*", (x, y) -> x*y);
+enum IOper{
+	PLUS("P", (x, y) -> x+y),
+	MINUS("M", (x, y) -> x-y),
+	MULTIPLE("M", (x, y) -> x*y);
 	
-	private final String SYMBOL;
-	private final DoubleBinaryOperator OP;
+	private final String symbol;
+	private final DoubleBinaryOperator op;
 	
-	Oper02(String sym, DoubleBinaryOperator op){
-		this.SYMBOL=sym;
-		this.OP = op;
+	IOper(String symbol, DoubleBinaryOperator op){
+		this.symbol=symbol;
+		this.op=op;
 	}
 	
-	public void apply(double x, double y) {
-		System.out.println(OP.applyAsDouble(x, y));
+	public double calc(double x, double y) {
+		return op.applyAsDouble(x, y);
 	}
 	
 	@Override
-	public String toString() {return SYMBOL;}
+	public String toString() {
+		return this.symbol;
+	}
 }
+
 public class Lambda02 {
 	public static void main(String[] args) {
-		Oper02.PLUS.apply(10, 20);
+		System.out.println(IOper.PLUS.toString());
+		System.out.println(IOper.PLUS.calc(10.6, 20.2));
+		
+		System.out.println(IOper.MINUS.toString());
+		System.out.println(IOper.MINUS.calc(50, 20));
+		
+		System.out.println(IOper.MULTIPLE.toString());
+		System.out.println(IOper.MULTIPLE.calc(20, 6));
+		
+		
 	}
 }
