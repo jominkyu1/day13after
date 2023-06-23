@@ -15,5 +15,7 @@ public class InterTest16 {
 	public static void main(String[] args) {
 		A16 a16 = new A16();
 		a16.methodA(new B16());
+		
+		
 	}
 }
