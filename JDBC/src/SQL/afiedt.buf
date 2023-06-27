@@ -1,0 +1,2 @@
+update emp set ename='ȫ�浿' where empno=11
+/

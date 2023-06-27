@@ -1,0 +1,25 @@
+SQL> show user
+USER은 "NIGHT"입니다
+SQL> select ename+'님' from emp;
+select ename+'님' from emp
+       *
+1행에 오류:
+ORA-01722: 수치가 부적합합니다 
+
+
+SQL> select ename+nvl('님') from emp;
+select ename+nvl('님') from emp
+             *
+1행에 오류:
+ORA-00909: 인수의 개수가 부적합합니다 
+
+
+SQL> select ename from emp;
+
+ENAME                                                                           
+----------------------------------------                                        
+홍길동                                                                          
+이순신                                                                          
+신사임당                                                                        
+
+SQL> spool off
