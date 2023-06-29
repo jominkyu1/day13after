@@ -110,3 +110,106 @@ COMMIT;
 select * from emp order by empno desc;
 
 select * from emp where sal>=1500;
+
+/* 오라클 비교연산자 종류
+    =(같다), >, <, >=, <=, 
+    <>, !=, ^= (다르다 3가지)
+*/
+
+-- 10번부서번호 레코드 검색
+SELECT * FROM emp WHERE deptno=10; 
+
+/*
+    SQL문은 영문 대소문자를 구분하지 않는다. 하지만 영문자 레코드 자료는 대소문자를 구분한다.
+*/
+
+INSERT INTO emp VALUES (14, 'ford', 3000, 300, 30 );
+
+SELECT * FROM emp WHERE ename='Ford';   -- Ford 검색 불가능
+SELECT * FROM emp WHERE ename='ford';   -- ford 검색 가능
+
+/* 논리 연산자 종류
+    1. AND : 두가지 조건 모두 만족
+    2. OR   : 한가지만 만족
+    3. NOT : ~가 아닌경우에만
+*/
+
+SELECT * FROM emp WHERE ename='이순신' AND deptno=10;
+SELECT * FROM emp WHERE deptno=10 OR deptno=20;
+
+SELECT * FROM emp WHERE NOT deptno=10;
+SELECT * FROM emp WHERE deptno != 10;
+SELECT * FROM emp WHERE deptno <> 10;
+SELECT * FROM emp WHERE deptno ^= 10;
+
+select * from emp order by empno desc;
+
+--급여 1500~3000
+SELECT * FROM emp WHERE sal>=1500 AND sal<=3000;
+
+--급여 1500이하거나 3000이상
+SELECT * FROM emp WHERE sal>=3000 OR sal<=1500;
+
+--보너스가 100이거나 200이거나 null인 경우
+SELECT * FROM emp WHERE comm<=200 OR comm IS NULL ;
+
+/*  컬럼명 between A and B 연산 특징)
+    특정 범위의 값을 조회하기 위해 사용.
+    A에는 범위의 최소값 B에는 범위의 최대값.
+*/
+
+--급여 1000~2000
+SELECT * FROM emp WHERE sal BETWEEN 1000 and 2000;
+
+--문제) 급여가 1500에서 2500사이가 아닌 사원
+SELECT * FROM emp WHERE sal NOT BETWEEN 1000 and 2000;
+
+/*  IN 연산의 특징)
+    예를 들면 보너스가 300혹은 500혹은 1000인 사원을 물어 볼때는 특정 컬럼의 값이 여러 개의 값 중에서 하나 인지를 물어봐야 하는데
+    이때 사용하는 연산자가 in 연산자이다
+    
+    사용형식) 컬럼명 in(A, B, C)
+    특정 컬럼의 값이 A, B, C 중에 하나만 만족하면 출력되도록 하는 표현을 할 때 사용
+    IN 연산자는 or연산자로 대체 가능.
+*/
+
+select * from emp order by empno desc;
+
+SELECT * FROM emp WHERE SAL IN(1000, 1500, 2000);
+SELECT * FROM emp WHERE sal=1000 OR sal=1500 OR sal=2000;
+
+--문제) 보너스가 100,200, null이 아닌 사원을 논리연산자와 비교연산자 등을 사용해서 구해보기
+SELECT * FROM emp WHERE comm != 100 AND comm != 200 AND comm IS NOT NULL;
+SELECT * FROM emp WHERE comm NOT BETWEEN 100 and 200 AND comm IS NOT NULL;
+
+--문제) IN 연산자를 사용하여 급여가 1000, 2000, 3000이 아닌 사원
+SELECT * FROM emp WHERE sal NOT IN(1000, 2000, 3000);
+SELECT * FROM emp WHERE NOT (sal=1000 or sal=2000 or sal=3000);
+
+SELECT * FROM emp WHERE sal ^= 1000 and sal != 2000 and sal <> 3000;
+
+/*  like 검색 연산자)
+    1. 검색하려는 값을 정확히 모를 경우에 와일드카드 문자인 %, _와 함께 사용
+    2. 와일드 카드 문자 종류
+        % : 하나 이상의 임의의 모르는 문자와 매핑대응
+        _ : 임의의 모르는 하나의 문자와 매핑 대응
+*/
+
+-- f로 시작하는 사원명 검색
+SELECT * FROM emp WHERE ename LIKE 'f%';
+
+--r을 포함하는 사원을 검색
+SELECT * FROM emp WHERE ename LIKE '%r%'; -- 가장 많이 사용
+
+--문제) _ 와일드 카드 문자와 like 검색 키워드를 사용하여  순신으로 끝나는 사원인 이순신 검색
+SELECT * FROM emp WHERE ename LIKE '_순신';
+
+--홍길동 제외 검색
+SELECT * FROM emp WHERE ename NOT LIKE('_길_');
+
+--ORDER BY를 이용한 정렬
+--  ASC : 오름차순 (생략가능, 123 abc 가나다)
+--  DESC : 내림차순
+
+SELECT * FROM emp ORDER BY empno DESC;
+SELECT * FROM emp ORDER BY ename DESC;
