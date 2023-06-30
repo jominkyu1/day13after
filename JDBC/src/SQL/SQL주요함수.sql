@@ -247,3 +247,5 @@ GROUP BY
     deptno
 HAVING
     SUM(sal) > 3000;
+    
+commit;
