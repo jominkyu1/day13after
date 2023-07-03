@@ -94,7 +94,7 @@ FROM
     dual;
 
 /*  NVL 함수 
-    레코드가 null일경우 연산불가, NVL함수를 이용해 null값을 0으로 치환
+    레코드가 null일경우 연산불가, NVL함수를 이용해 null값을 지정값으로 치환
 */
 
 SELECT

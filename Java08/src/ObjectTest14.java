@@ -9,9 +9,11 @@ public class ObjectTest14 {
 		System.out.println(sb.equals(sb2)); //false, StringBuffer 클래스에는 equals 오버라이딩 안되어있음.
 
 		System.out.println(ObjectTest14.stringEquals(sb, sb2));
+		//혹은 .toString()
 	}
 
 	public static boolean stringEquals(CharSequence a, CharSequence b){
+										//length() 인터페이스
 		if(a.length()!=b.length()) return false;
 		if(a==b) return true;
 		
