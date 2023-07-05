@@ -76,7 +76,7 @@ FROM
 
 SELECT
     sysdate - 1 AS "어제날짜",
-    sysdate AS "오늘날짜",
+    sysdate     AS "오늘날짜",
     sysdate + 1 AS "내일날짜"
 FROM
     dual;
@@ -112,8 +112,8 @@ WHERE
     empno = 12;
 
 CREATE TABLE emp01 (
-    deptno   INT PRIMARY KEY,
-    ename    VARCHAR2(20) NOT NULL
+    deptno INT PRIMARY KEY,
+    ename  VARCHAR2(20) NOT NULL
 );
 
 INSERT INTO emp01 VALUES (
@@ -185,11 +185,11 @@ FROM
 --그룹함수 테이블생성
 
 CREATE TABLE emp02 (
-    deptno   INT PRIMARY KEY,
-    ename    VARCHAR2(20) NOT NULL,
-    sal      INT,
-    comm     INT,
-    job      VARCHAR2(50) NOT NULL
+    deptno INT PRIMARY KEY,
+    ename  VARCHAR2(20) NOT NULL,
+    sal    INT,
+    comm   INT,
+    job    VARCHAR2(50) NOT NULL
 );
 
 DESC emp02;
@@ -203,10 +203,10 @@ ORDER BY
 
 INSERT INTO emp02 VALUES (
     20,
-    'king',
-    2500,
-    NULL,
-    '관리자'
+    'Gos',
+    3000,
+    500,
+    '기타'
 );
 
 --전체사원의 월급의 총합
@@ -233,7 +233,7 @@ FROM
 -- 보너스 수령하는 사원수와 총 사원수
 
 SELECT
-    COUNT(*) AS "총 사원수", 
+    COUNT(*)    AS "총 사원수",
     COUNT(comm) AS "보너스 받는 사원수"
 FROM
     emp02;
@@ -247,5 +247,31 @@ GROUP BY
     deptno
 HAVING
     SUM(sal) > 3000;
+
+COMMIT;
+
+SELECT
+    *
+FROM
+    emp02;
+
+SELECT
+    COUNT(DISTINCT job)
+FROM
+    emp02;
+
+-- 부서별 최대급여 최소급여
+SELECT
+    deptno,
+    MAX(sal)
+FROM
+    emp02
+GROUP BY
+    deptno;
     
-commit;
+-- 급여 평균이 2000이상인 부서만 출력
+select deptno, avg(sal) from emp02 group by deptno having avg(sal)>=2000;
+
+-- 부서별 최대급여가 1500이상인 경우 부서번호, 부서별 최대급여, 최소급여 출력
+select deptno, max(sal), min(sal) from emp02 group by deptno having max(sal)>=1000;
+

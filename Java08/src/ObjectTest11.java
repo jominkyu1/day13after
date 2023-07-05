@@ -21,5 +21,6 @@ public class ObjectTest11 {
 		String str3 = str2.replace('a', 'A');
 		
 		System.out.println("\n"+str3);
+		
 	}
 }

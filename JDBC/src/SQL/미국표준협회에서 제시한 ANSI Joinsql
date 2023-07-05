@@ -1,0 +1,96 @@
+/*  Ansi cross join, inner join 실습을 위한 테이블 생성
+*/
+
+--depart11 테이블 생성
+create table depart11(
+    dept_code varchar2(10) primary key, --강의실 호수
+    dept_name varchar2(50) not null --강의실 담당 선생님
+    );
+
+insert into depart11 values ('401', '홍길동샘');
+insert into depart11 values ('402', '이순신샘');
+
+select * from depart11 order by dept_code;
+    
+    
+--student11 학생 테이블 생성
+create table student11(
+    st_no int primary key,
+    st_name varchar2(30) not null,
+    st_gender varchar2(10),
+    dept_code varchar2(20)
+    );
+
+insert into student11 values (11, '신사임당', '여', '401');
+insert into student11 values (12, '홍길동', '남', '402');
+insert into student11 values (13, '강감찬', '남', '402');
+    
+select * from student11 order by st_no;
+
+-- ANSI Cross join
+select * from depart11 cross join student11;
+
+-- ON 조건절울 사용한 ANSI inner join
+select * from depart11 inner join student11 on depart11.dept_code = student11.dept_code;
+
+-- dept_code 공통컬럼을 이용하여 강감찬 학생의 정보를 Inner join으로 검색
+select 
+    d.dept_code, 
+    d.dept_name, 
+    s.st_gender, 
+    s.st_name, s.st_no 
+from depart11 d inner join student11 s on d.dept_code = s.dept_code 
+where s.st_name = '강감찬';
+
+
+-- using 절문을 사용한 inner join
+select * from depart11 inner join student11 using (dept_code);
+
+-- 공통 컬럼을 자동으로 찾아 inner join
+select * from depart11 natural join student11;
+select * from depart11;
+select * from student11;
+
+
+// ANSI Outer join 실습을 위한 테이블 생성
+create table dept21(
+    deptno int primary key,
+    dname varchar2(50) not null --부서명
+    );
+    
+insert into dept21 values (10, 'ACC');
+insert into dept21 values (20, 'Research');
+
+select * from dept21;
+
+commit;
+
+
+create table dept22(
+    deptno int primary key,
+    dname varchar2(50) not null
+    );
+    
+insert into dept22 values (10, 'ACC');
+insert into dept22 values (30, 'Sales');
+
+select * from dept22;
+
+commit;
+
+
+
+
+-- dept21 테이블에는 해당 자료가 있지만 dept22테이블에는 20번 부서번호가 없다.
+-- 이런경우 자료가 출력되지 않는 문제점을 해결하기 위해 오른쪽에 기술된 dept22 테이블에 해당 자료가 없을때를 기준으로
+-- ANSI left outer join 기법 사용 반대의 경우 right outer join, 모두포함 full outer join
+
+select * from dept21 left outer join dept22 on dept21.deptno = dept22.deptno;
+select * from dept21 left outer join dept22 using (deptno) order by deptno; -- 공통컬럼이있다면 using으로 대체가능
+
+select * from dept21 right outer join dept22 on dept21.deptno = dept22.deptno;
+select * from dept21 right outer join dept22 using (deptno) order by deptno;
+
+select * from dept21 full outer join dept22 on dept21.deptno = dept22.deptno;
+select * from dept21 full outer join dept22 using (deptno) order by deptno;
+

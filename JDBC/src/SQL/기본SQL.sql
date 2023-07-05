@@ -100,6 +100,7 @@ SELECT deptno FROM emp;
 
  -- distinct 예약어는 중복 레코드를 한번만 나오게 한다.
 SELECT DISTINCT deptno FROM emp;
+select * from emp;
 
 
 /*  오라클 SQL Developer는 insert, update, delete문 수행 후 쿼리문이 오라클에 자동반영되는 오토커밋이 아니다
