@@ -275,3 +275,7 @@ select deptno, avg(sal) from emp02 group by deptno having avg(sal)>=2000;
 -- 부서별 최대급여가 1500이상인 경우 부서번호, 부서별 최대급여, 최소급여 출력
 select deptno, max(sal), min(sal) from emp02 group by deptno having max(sal)>=1000;
 
+
+
+
+
