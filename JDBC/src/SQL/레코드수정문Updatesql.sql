@@ -15,7 +15,7 @@ select * from dept order by deptno asc;
 --dept -> dept01 table 복사본 생성
 create table dept01 as select * from dept;
 
-select * from dept01 order by deptno desc;
+select * from dept01 order by deptno;
 
 --서브쿼리문 검색을 통한 레코드 수정실습
 update dept01 
@@ -23,3 +23,4 @@ set (dname, LOC) = (select dname, LOC from dept where deptno=40)
 where deptno=20;
 --dept 테이블 40번 부서번호의 부서명과 부서지역을 검색해서 dept01 테이블의 20번 부서의 부서명과
 --부서지역을 연구부, 대전으로 변경한다.
+

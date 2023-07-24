@@ -64,3 +64,4 @@ select * from dept55;
 --truncate문에 의한 전체 레코드 삭제
 truncate table dept55;
 rollback; --truncate는 auto commit이므로 롤백 불가능
+

@@ -142,3 +142,165 @@ select * from emp71;
 -- 주종관계인 dept71과 emp71 두 테이블의 공통 컬럼인 deptno를 기준으로 ANSI inner join
 select * from dept71 inner join emp71 using (deptno);
 select * from dept71 full outer join emp71 using (deptno) order by deptno asc;
+
+--기본키가 있는 학과 테이블 생성
+create table depart71(
+    deptcode varchar2(10) constraint depart71_deptcode_pk primary key, --학과코드
+    deptname varchar2(50) constraint depart71_deptname_nn not null --학과이름
+);
+
+insert into depart71 values('a001', '영어교육학과');
+insert into depart71 values('a002', '컴퓨터공학과');
+
+select * from depart71;
+
+create table student71(
+    sno number(38) constraint student71_sno_pk primary key, --학번
+    sname varchar2(50) constraint student71_sname_nn not null, --이름
+    gender varchar2(10) constraint student71_gender_nn not null, --성멸
+    addr varchar2(300), --주소
+    deptcode varchar2(10) constraint student71_deptno_fk REFERENCES depart71(deptcode) --외래키 설정 (학과코드)
+    );
+    
+insert into student71 values (101, '홍길동', '남', '서울시', 'a001');
+insert into student71 values (102, '이순신', '남', '서울시', 'a002');
+
+select * from student71 order by sno;
+
+-- 문제) inner join말고 학과 코드 공통 컬럼을 기준으로 equi join 검색문
+
+select * from depart71, student71 where depart71.deptcode = student71.deptcode;
+
+select table_name, constraint_type, constraint_name, r_constraint_name from user_constraints
+where table_name in('DEPART71', 'STUDENT71');
+
+--check 제약조건 실습
+
+create table emp73(
+    empno number(38) constraint emp73_empno_pk primary key,
+    ename varchar2(50) constraint emp73_ename_nn not null,
+    sal number(38) constraint emo73_sal_ck check(sal between 500 and 5000), -- 급여 check 제약조건 500~5000값만 들어감
+    gender varchar2(6) constraint emp73_gender_ck check(gender in('M','F')) -- 성별 M혹은 F만
+    );
+    
+insert into emp73 values(1101, '홍길동', 5000, 'M'); -- sal 제약조건 위배
+insert into emp73 values(1103, '신사임당', 3000, 'C'); -- gender 제약조건 위배
+
+select * from emp73;
+
+create table dept73(
+    deptno number(38) primary key, -- 부서 번호
+    dname varchar2(50),
+    LOC varchar2(50) default '서울' -- LOC컬럼에는 값을 저장하지않아도 서울값이 저장됨
+    );
+    
+insert into dept73 (deptno, dname) values (10, '개발부'); -- default값으로 LOC에는 서울이 들어감
+
+select * from dept73;
+
+     /*  제약 조건을 변경하는 명령문이다.
+추가
+ALTER TABLE 테이블이름 ADD CONSTRAINT 제약이름 제약조건;
+수정
+ALTER TABLE 테이블이름 MODIFY 컬럼명 컬럼조건;
+삭제
+ALTER TABLE 테이블이름 DROP CONTRAINT 제약이름;      
+      */
+    
+    
+--컬럼레벨 지정방식으로 emp75 테이블 생성
+create table emp75(
+    empno number(38) primary key,
+    ename varchar2(50) not null,
+    job varchar2(50) unique, -- null 중복허용, 그 외 중복 X
+    deptno number(38) references dept71(deptno) --외래키 설정       
+    );
+    
+select * from emp75;
+
+select table_name, constraint_name, constraint_type, r_constraint_name from user_constraints
+where table_name = ('EMP77');
+
+--테이블 레벨 지정방식으로 emp76 테이블을 생성
+create table emp76(
+    empno number(38),
+    ename varchar2(50) not null,
+    job varchar2(50),
+    deptno number(38),
+    
+    primary key(empno),
+    unique(job),
+    foreign key(deptno) references dept71(deptno)
+    );
+    
+--테이블 레벨 지정방식으로 constraint 키워드를 사용해서 사용자 정의 제약조건명을 지정하여 테이블 생성
+create table emp77(
+    empno number(38),
+    ename varchar2(50) constraint emp77_ename_nn not null,
+    job varchar2(50),
+    deptno number(38),
+    
+    constraint emp77_empno_pk primary key(empno),
+    constraint emp77_job_uk unique(job),
+    constraint emp77_deptno_fk foreign key(deptno) references dept71(deptno)
+);
+
+--하나의 테이블에 두개의 기본키를 지정
+create table member01(
+    id varchar2(20),
+    name  varchar2(50),
+    addr varchar2(200),
+    phone varchar2(30),
+    
+    constraint member01_idphone_pk primary key(id, phone) --id와 phone 컬럼을 기본키로 지정
+    );
+    
+--제약조건 확인 (컬럼명까지)
+select owner, constraint_name, table_name, column_name from user_cons_columns
+where table_name='MEMBER01';
+
+/*  미리 생성된 테이블 컬럼에 제약조건 추가
+    
+    alter table 테이블명
+    add constraint 사용자정의제약조건명 제약조건타입
+*/
+
+-- 모든 컬럼 제약조건이 null인 테이블 생성
+create table emp78(
+    empno int,
+    ename varchar2(30),
+    job varchar2(50),
+    deptno number(38)
+    );
+    
+--empno 컬럼에 제약조건 추가 (기본키)
+alter table emp78
+add constraint emp78_empno_pk primary key(empno);
+
+select constraint_name, constraint_type, table_name, r_constraint_name from user_constraints
+where table_name='EMP78';
+
+--deptno 컬럼에 제약조건 추가 (외래키)
+alter table emp78
+add constraint emp78_deptno_fk foreign key(deptno) references dept71(deptno);
+
+--emp78 테이블의 ename컬럼에 not null 추가
+alter table emp78
+modify ename constraint emp78_ename_nn not null;
+
+insert into emp78 values (11, '이순신', '관리사원', 10);
+insert into emp78 values (12, '홍길동', '영업사원', 20);
+
+--empno primary key 제거
+alter table emp78 drop constraint emp78_empno_pk;
+--ename not null 제거
+alter table emp78 drop constraint emp78_ename_nn;
+
+select * from emp78;
+
+--제약조건 제거 후 삽입
+insert into emp78 values(11, null, '영업사원', 20);
+
+--emp78테이블 제약조건명 확인
+select constraint_name from user_constraints where table_name='EMP78';
+
